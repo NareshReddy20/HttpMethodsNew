@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="p-3 bg-container">
+      <h1 class="heading mb-4">Delete method practice</h1>
+      <p class="request-url-text">REQUEST URL: <span class="request-url">https://gorest.co.in/public-api/users</span></p>
+      <input placeholder="Enter id" class="w-75 user-input p-1" id="userInput"/>
+      <br />
+      <button class="mt-3 p-2 button" id="sendDeleteRequestBtn">Send Delete Request</button>
+      <div class="request-status-container p-2 mt-4">
+        <p>Request Status</p>
+        <p class="request-status" id="requestStatus"></p>
+        <p class="d-none" id="loading">Loading....</p>
+      </div>
+      <div class="response-body-container p-2 mt-4">
+        <p>Response Body</p>
+        <p class="http-response" id="httpResponse"></p>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+
+.bg-container {
+  background-image: linear-gradient(to right, #acb6e5, #86fce8);
+}
+
+.heading {
+  color: #2d3a8c;
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.request-url-text {
+  color: #35469c;
+  font-weight: bold;
+}
+
+.request-url {
+  font-weight: 300;
+}
+
+.user-input {
+  color: #35469c;
+  background-color: transparent;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #7b93db;
+}
+
+.button {
+  color: white;
+  background-color: #4055a8;
+  border-width: 0;
+  border-radius: 4px;
+}
+
+.request-status-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.request-status {
+  color: #4055a8;
+  font-family: "Roboto";
+  font-size: 32px;
+}
+
+.response-body-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.http-response {
+  color: #4055a8;
+  font-family: "Roboto";
+  font-size: 14px;
+}
+
+</style>
+
+<script>
+    let userInputEle=document.getElementById("userInput");
+let sendBtnEle=document.getElementById("sendDeleteRequestBtn");
+let requestStatusEle=document.getElementById("requestStatus");
+let loadingEle=document.getElementById("loading");
+let httpResponseEle=document.getElementById("httpResponse");
+
+sendBtnEle.onclick=function(){
+    let userValue=userInputEle.value;
+    let url="https://gorest.co.in/public-api/users/"+userValue;
+    let options={
+        method:"DELETE",
+        headers:{
+            "Content-Type":"application/json",
+            Accept:"application/json",
+            Authorization:"Bearer f6d9b109f7ecaee3c4a6743898699e266d7c1db72b086c3129811567fd86704a"
+        },
+    };
+    loadingEle.classList.remove("d-none");
+    requestStatusEle.classList.add("d-none");
+    fetch(url,options)
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(jsonData){
+        loadingEle.classList.add("d-none");
+        requestStatusEle.classList.remove("d-none");
+        let statusCode=jsonData.code;
+        let responseBody=JSON.stringify(jsonData);
+        requestStatusEle.textContent=statusCode;
+        httpResponseEle.textContent=responseBody;
+    });
+}
+</script>
